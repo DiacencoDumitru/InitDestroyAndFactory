@@ -1,23 +1,52 @@
 package practice.springcourse;
 
-/*
-Реализуем класс MusicPlayer, который будет зависеть от нашей музыки.
-В этом классе мы применим IoC.
+import java.util.ArrayList;
+import java.util.List;
 
-1. Общий интерфейс Music, и соответственно мы сможем в нашем MusicPlayer играть музыку любого жанра потому-что у нас интерфейс Music
-2. IoC, в конструктор будем передавать наш жанр музыки, здесь мы используем полиморфизм
-3. В конструкторе мы присваиваем нашему полю music то что у нас было внедряно в наш MusicPlayer
-*/
+/*
+1. Реализуем класс MusicPlayer, который будет зависеть от нашей музыки. В этом классе мы применим IoC.
+2. IoC, из-за того что мы сзодали конструктор мы должны вручную создать и пустой конструктор
+3. для сеттеров camelCase используется, сеттер Spring читает название этого метода setMusic и он убирает слово set оставляя только Music,
+дальше он переводит в маленькую букву music и таким образом когда мы указываем зависимость music он ищет сеттер setMusic
+ */
 public class MusicPlayer {
 
-    private Music music;
+    private List<Music> musicList = new ArrayList<>();
+    private String name;
+    private int volume;
 
     // IoC
-    public MusicPlayer(Music music) {
-        this.music = music;
+    public MusicPlayer(List<Music> musicList) {
+        this.musicList = musicList;
+    }
+
+    public MusicPlayer() {
+    }
+
+    // через setter
+    public void setMusicList(List<Music> musicList) {
+        this.musicList = musicList;
     }
 
     public void playMusic() {
-        System.out.println("Playing: " + music.getSong());
+        for (Music music : musicList) {
+            System.out.println("Playing: " + music.getSong());
+        }
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setVolume(int volume) {
+        this.volume = volume;
+    }
+
+    public int getVolume() {
+        return volume;
     }
 }
