@@ -2,28 +2,35 @@ package practice.springcourse;
 
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-// Внедряем с помощью сеттеров, обычное простое значение (полей). И мы получаем значения с помощью Геттеров.
+/*
+Инициализация singleton-бина в Spring происходит перед prototype-бинами, потому что Spring создаёт singleton-бины при запуске контекста,
+а prototype-бины — только по запросу, то есть при вызове context.getBean().
+*/
 public class TestSpring {
     public static void main(String[] args) {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
                 "applicationContext.xml"
         );
 
-        MusicPlayer firstMusicPlayer = context.getBean("musicPlayer", MusicPlayer.class);
-        MusicPlayer secondMusicPlayer = context.getBean("musicPlayer", MusicPlayer.class);
+        System.out.println("\n=== Prototype Scope: RockMusic ===");
+        RockMusic rockMusic1 = context.getBean("musicBean2", RockMusic.class);
+        RockMusic rockMusic2 = context.getBean("musicBean2", RockMusic.class);
+        RockMusic rockMusic3 = context.getBean("musicBean2", RockMusic.class);
 
-        boolean comparison = firstMusicPlayer == secondMusicPlayer;
+        System.out.println(rockMusic1.getSong());
+        System.out.println(rockMusic2.getSong());
+        System.out.println(rockMusic3.getSong());
 
-        System.out.println(comparison);
+        System.out.println("\n=== Singleton Scope: ClassicalMusic ===");
+        ClassicalMusic classicalMusic1 = context.getBean("musicBean", ClassicalMusic.class);
+        ClassicalMusic classicalMusic2 = context.getBean("musicBean", ClassicalMusic.class);
+        ClassicalMusic classicalMusic3 = context.getBean("musicBean", ClassicalMusic.class);
 
-        System.out.println(firstMusicPlayer);
-        System.out.println(secondMusicPlayer);
+        System.out.println(classicalMusic1.getSong());
+        System.out.println(classicalMusic2.getSong());
+        System.out.println(classicalMusic3.getSong());
 
-        firstMusicPlayer.setVolume(10);
-
-        System.out.println(firstMusicPlayer.getVolume());
-        System.out.println(secondMusicPlayer.getVolume());
-
+        System.out.println("\nClosing context...");
         context.close();
     }
 }

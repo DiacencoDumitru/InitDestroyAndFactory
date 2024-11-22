@@ -9,17 +9,18 @@
 
     <context:property-placeholder location="classpath:MusicPlayer.properties"/>
 
+    <!-- тут у нас scope Singleton так как Spring его использует по умолчанию -->
     <bean id="musicBean"
-          class="practice.springcourse.ClassicalMusic">
+          class="practice.springcourse.ClassicalMusic"
+          init-method="doMyInit"
+          destroy-method="doMyDestroy">
     </bean>
 
-    <bean id="musicPlayer"
-          class="practice.springcourse.MusicPlayer"
-          scope="prototype">
-        <property name="music" ref="musicBean"/>
-
-        <property name="name" value="${musicPlayer.name}"/>
-        <property name="volume" value="${musicPlayer.volume}"/>
+    <bean id="musicBean2"
+          class="practice.springcourse.RockMusic"
+          scope="prototype"
+          init-method="doMyInitPrototype"
+          destroy-method="doMyDestroyPrototype">
     </bean>
 
 </beans>
